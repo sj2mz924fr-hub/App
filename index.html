@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHPG Reset — Version 1</title>
+
+<style>
+:root {
+  --ink:#17202a;
+  --muted:#65717d;
+  --bg:#f5f7f8;
+  --card:#fff;
+  --line:#dfe5e9;
+  --accent:#244b5a;
+  --accent2:#d9a441;
+  --good:#3d7658;
+  --danger:#9b4b4b;
+}
+
+* {
+  box-sizing:border-box;
+}
+
+body {
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+}
+
+.app {
+  max-width:1100px;
+  margin:auto;
+  min-height:100vh;
+}
+
+.top {
+  background:var(--accent);
+  color:#fff;
+  padding:24px 22px 18px;
+  position:sticky;
+  top:0;
+  z-index:5;
+}
+
+.brand {
+  font-size:24px;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+.tag {
+  opacity:.8;
+  font-size:13px;
+  margin-top:3px;
+}
+
+.nav {
+  display:flex;
+  gap:7px;
+  overflow:auto;
+  margin-top:18px;
+}
+
+.nav button {
+  border:0;
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  padding:10px 13px;
+  border-radius:10px;
+  white-space:nowrap;
+  font-weight:650;
+}
+
+.nav button.active {
+  background:#fff;
+  color:var(--accent);
+}
+
+main {
+  padding:20px;
+}
+
+.screen {
+  display:none;
+}
+
+.screen.active {
+  display:block;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+}
+
+.grid3 {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+
+.card {
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 2px 8px #00000008;
+}
+
+.hero {
+  background:linear-gradient(135deg,#244b5a,#315e6e);
+  color:#fff;
+  border:0;
+}
+
+.hero h1 {
+  margin:0 0 8px;
+  font-size:28px;
+}
+
+.muted {
+  color:var(--muted);
+}
+
+.hero .muted {
+  color:#dbe7eb;
+}
+
+h2,
+h3 {
+  margin-top:0;
+}
+
+.stat {
+  font-size:28px;
+  font-weight:800;
+}
+
+.label {
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--muted);
+  font-weight:750;
+}
+
+button.primary {
+  background:var(--accent);
+  color:#fff;
+  border:0;
+  border-radius:11px;
+  padding:12px 16px;
+  font-weight:750;
+  cursor:pointer;
+}
+
+button.secondary {
+  background:#eef2f4;
+  color:var(--ink);
+  border:0;
+  border-radius:11px;
+  padding:11px 14px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+button.danger {
+  background:#f6e7e7;
+  color:var(--danger);
+  border:0;
+  border-radius:11px;
+  padding:10px 13px;
+  font-weight:700;
+}
+
+input,
+select,
+textarea {
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fff;
+  font:inherit;
+  margin-top:6px;
+}
+
+textarea {
+  min-height:100px;
+  resize:vertical;
+}
+
+.field {
+  margin:13px 0;
+}
+
+.field label {
+  font-weight:700;
+  font-size:14px;
+}
+
+.range {
+  accent-color:var(--accent);
+}
+
+.pill {
+  display:inline-block;
+  padding:6px 9px;
+  border-radius:99px;
+  background:#eef2f4;
+  font-size:12px;
+  font-weight:700;
+  margin:3px;
+}
+
+.pill.good {
+  background:#e7f1eb;
+  color:var(--good);
+}
+
+.pill.gold {
+  background:#fbf1d9;
+  color:#735313;
+}
+
+.progress {
+  height:9px;
+  background:#e8ecef;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.progress > div {
+  height:100%;
+  background:var(--accent);
+  border-radius:99px;
+}
+
+.week {
+  border-left:4px solid var(--accent);
+  padding-left:14px;
+  margin:12px 0;
+}
+
+.week.done {
+  border-color:var(--good);
+}
+
+.week h3 {
+  margin-bottom:5px;
+}
+
+.big {
+  font-size:42px;
+  font-weight:850;
+  text-align:center;
+  margin:10px;
+}
+
+.center {
+  text-align:center;
+}
+
+.urge-step {
+  display:none;
+}
+
+.urge-step.active {
+  display:block;
+}
+
+.circle {
+  width:145px;
+  height:145px;
+  border-radius:50%;
+  background:#eaf0f2;
+  margin:18px auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:38px;
+  font-weight:800;
+  color:var(--accent);
+}
+
+.timer {
+  font-size:54px;
+  font-weight:850;
+  text-align:center;
+  color:var(--accent);
+  margin:10px;
+}
+
+.bar {
+  height:12px;
+  background:#edf0f2;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.bar i {
+  display:block;
+  height:100%;
+  background:var(--accent);
+  width:0;
+}
+
+.entry {
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.entry:last-child {
+  border:0;
+}
+
+.checks {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+
+.checks label {
+  background:#f5f7f8;
+  padding:9px;
+  border-radius:9px;
+  font-size:14px;
+}
+
+footer {
+  padding:25px 20px;
+  color:var(--muted);
+  font-size:12px;
+  text-align:center;
+}
+
+@media(max-width:720px) {
+  .grid,
+  .grid3 {
+    grid-template-columns:1fr;
+  }
+
+  main {
+    padding:14px;
+  }
+
+  .top {
+    padding:18px 14px;
+  }
+
+  .hero h1 {
+    font-size:23px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="top">
+
+<div class="brand">
+SHPG RESET
+</div>
+
+<div class="tag">
+Behavior Change Support • Version 1 Prototype
+</div>
+
+<nav class="nav">
+
+<button class="active" data-tab="home">
+Home
+</button>
+
+<button data-tab="checkin">
+Daily Check-In
+</button>
+
+<button data-tab="urge">
+Urge Tool
+</button>
+
+<button data-tab="trigger">
+Trigger Journal
+</button>
+
+<button data-tab="relapse">
+Lapse Analysis
+</button>
+
+<button data-tab="program">
+6-Week Program
+</button>
+
+<button data-tab="progress">
+Progress
+</button>
+
+</nav>
+
+</header>
+
+<main>
+
+<section id="home" class="screen active">
+
+<div class="card hero">
+
+<h1>
+Pause. Understand. Choose.
+</h1>
+
+<p class="muted">
+SHPG Reset helps users notice patterns, manage urges, and practice healthier responses.
+It is a support tool—not a diagnosis or emergency service.
+</p>
+
+<button class="primary" onclick="showTab('checkin')">
+Start today's check-in →
+</button>
+
+</div>
+
+<div class="grid" style="margin-top:16px">
+
+<div class="card">
+
+<div class="label">
+Today
+</div>
+
+<div class="stat" id="homeDays">
+0
+</div>
+
+<div class="muted">
+check-ins completed
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="label">
+Current focus
+</div>
+
+<div class="stat" id="homeWeek">
+Week 1
+</div>
+
+<div class="muted">
+Understanding the Cycle
+</div>
+
+</div>
+
+</div>
+
+<div class="card" style="margin-top:16px">
+
+<h3>
+Core principle
+</h3>
+
+<p>
+<b>An urge is not a command.</b>
+The goal is not perfection or shame.
+The goal is increasing the space between trigger and behavior so a different choice becomes possible.
+</p>
+
+</div>
+
+</section>
+
+
+<section id="checkin" class="screen">
+
+<div class="card">
+
+<h2>
+Daily Check-In
+</h2>
+
+<p class="muted">
+A 60-second snapshot. Use this to notice patterns—not to judge yourself.
+</p>
+
+<div class="grid">
+
+<div class="field">
+
+<label>
+Mood today:
+<span id="moodVal">5</span>/10
+</label>
+
+<input
+id="mood"
+class="range"
+type="range"
+min="0"
+max="10"
+value="5"
+oninput="moodVal.textContent=this.value">
+
+</div>
+
+
+<div class="field">
+
+<label>
+Urge intensity:
+<span id="urgeVal">0</span>/10
+</label>
+
+<input
+id="urgeLevel"
+class="range"
+type="range"
+min="0"
+max="10"
+value="0"
+oninput="urgeVal.textContent=this.value">
+
+</div>
+
+
+<div class="field">
+
+<label>
+Stress:
+<span id="stressVal">5</span>/10
+</label>
+
+<input
+id="stress"
+class="range"
+type="range"
+min="0"
+max="10"
+value="5"
+oninput="stressVal.textContent=this.value">
+
+</div>
+
+
+<div class="field">
+
+<label>
+Sleep last night:
+<span id="sleepVal">7</span> hours
+</label>
+
+<input
+id="sleep"
+class="range"
+type="range"
+min="0"
+max="12"
+value="7"
+step=".5"
+oninput="sleepVal.textContent=this.value">
+
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>
+Which factors are present?
+</label>
+
+<div class="checks">
+
+<label>
+<input type="checkbox" value="loneliness" class="factor">
+Loneliness
+</label>
+
+<label>
+<input type="checkbox" value="boredom" class="factor">
+Boredom
+</label>
+
+<label>
+<input type="checkbox" value="anxiety" class="factor">
+Anxiety
+</label>
+
+<label>
+<input type="checkbox" value="rejection" class="factor">
+Rejection
+</label>
+
+<label>
+<input type="checkbox" value="anger" class="factor">
+Anger
+</label>
+
+<label>
+<input type="checkbox" value="stress" class="factor">
+Stress
+</label>
+
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>
+Did pornography use occur today?
+</label>
+
+<select id="used">
+
+<option value="no">
+No
+</option>
+
+<option value="yes">
+Yes
+</option>
+
+<option value="unsure">
+Prefer not to say
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+One sentence about today
+</label>
+
+<textarea
+id="checkNote"
+placeholder="What do you want your clinician—or future self—to understand?">
+</textarea>
+
+</div>
+
+<button class="primary" onclick="saveCheckin()">
+Save check-in
+</button>
+
+<span id="checkMsg" class="muted"></span>
+
+</div>
+
+</section>
+
+
+<section id="urge" class="screen">
+
+<div class="card">
+
+<h2>
+10-Minute Urge Tool
+</h2>
+
+<p class="muted">
+Use when an urge feels strong. You can stop at any time.
+</p>
+
+
+<div class="urge-step active" id="u1">
+
+<div class="center">
+
+<div class="circle">
+1
+</div>
+
+<h3>
+STOP & NOTICE
+</h3>
+
+<p>
+Rate the urge without acting on it.
+</p>
+
+<input
+id="uStart"
+class="range"
+type="range"
+min="0"
+max="10"
+value="5"
+oninput="uStartVal.textContent=this.value">
+
+<div>
+<b id="uStartVal">5</b>/10
+</div>
+
+</div>
+
+<button class="primary" onclick="urgeNext(2)">
+Continue
+</button>
+
+</div>
+
+
+<div class="urge-step" id="u2">
+
+<div class="center">
+
+<div class="circle">
+2
+</div>
+
+<h3>
+BREATHE
+</h3>
+
+<p>
+Slow your breathing. Let the body settle before making a decision.
+</p>
+
+<div class="timer" id="timer">
+60
+</div>
+
+<div class="bar">
+<i id="timerBar"></i>
+</div>
+
+<button class="secondary" onclick="startBreath()">
+Start 60-second reset
+</button>
+
+</div>
+
+<button class="primary" onclick="urgeNext(3)">
+Continue
+</button>
+
+</div>
+
+
+<div class="urge-step" id="u3">
+
+<div class="center">
+
+<div class="circle">
+3
+</div>
+
+<h3>
+CHANGE YOUR ENVIRONMENT
+</h3>
+
+<p>
+Move away from the device or location associated with the behavior.
+</p>
+
+</div>
+
+<div class="checks">
+
+<label>
+<input type="checkbox" class="move">
+I put the phone away
+</label>
+
+<label>
+<input type="checkbox" class="move">
+I left the room
+</label>
+
+<label>
+<input type="checkbox" class="move">
+I went outside
+</label>
+
+<label>
+<input type="checkbox" class="move">
+I contacted someone
+</label>
+
+</div>
+
+<button class="primary" onclick="urgeNext(4)">
+Continue
+</button>
+
+</div>
+
+
+<div class="urge-step" id="u4">
+
+<div class="center">
+
+<div class="circle">
+4
+</div>
+
+<h3>
+CHOOSE A REPLACEMENT
+</h3>
+
+<p>
+Pick one action that serves the need underneath the urge.
+</p>
+
+</div>
+
+<div class="grid3">
+
+<button class="secondary"
+onclick="chooseReplacement('Walk / exercise')">
+Walk / exercise
+</button>
+
+<button class="secondary"
+onclick="chooseReplacement('Call someone')">
+Call someone
+</button>
+
+<button class="secondary"
+onclick="chooseReplacement('Shower / reset')">
+Shower / reset
+</button>
+
+<button class="secondary"
+onclick="chooseReplacement('Journal')">
+Journal
+</button>
+
+<button class="secondary"
+onclick="chooseReplacement('Meditate')">
+Meditate
+</button>
+
+<button class="secondary"
+onclick="chooseReplacement('Other')">
+Other
+</button>
+
+</div>
+
+<p id="replacement" class="center"></p>
+
+<button class="primary" onclick="urgeNext(5)">
+Continue
+</button>
+
+</div>
+
+
+<div class="urge-step" id="u5">
+
+<div class="center">
+
+<div class="circle">
+5
+</div>
+
+<h3>
+RE-RATE & CHOOSE
+</h3>
+
+<p>
+Notice what changed. The goal is not zero; the goal is choice.
+</p>
+
+<input
+id="uEnd"
+class="range"
+type="range"
+min="0"
+max="10"
+value="3"
+oninput="uEndVal.textContent=this.value">
+
+<div>
+<b id="uEndVal">3</b>/10
+</div>
+
+<p>
+<b>An urge is not a command.</b>
+</p>
+
+<button class="primary" onclick="finishUrge()">
+Save urge episode
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section id="trigger" class="screen">
+
+<div class="card">
+
+<h2>
+Trigger Journal
+</h2>
+
+<p class="muted">
+Map the sequence:
+Trigger → Emotion → Thought → Urge → Behavior → Consequence → Alternative.
+</p>
+
+<div class="grid">
+
+<div class="field">
+
+<label>
+What happened immediately beforehand?
+</label>
+
+<textarea id="tTrigger"></textarea>
+
+</div>
+
+<div class="field">
+
+<label>
+What emotion was present?
+</label>
+
+<input
+id="tEmotion"
+placeholder="e.g., lonely, anxious, bored">
+
+</div>
+
+<div class="field">
+
+<label>
+What were you telling yourself?
+</label>
+
+<textarea id="tThought"></textarea>
+
+</div>
+
+<div class="field">
+
+<label>
+What did you want the behavior to accomplish?
+</label>
+
+<textarea
+id="tFunction"
+placeholder="Escape? Relief? Stimulation? Connection? Sleep?">
+</textarea>
+
+</div>
+
+<div class="field">
+
+<label>
+What did you do?
+</label>
+
+<textarea id="tBehavior"></textarea>
+
+</div>
+
+<div class="field">
+
+<label>
+Short-term payoff
+</label>
+
+<textarea id="tPayoff"></textarea>
+
+</div>
+
+<div class="field">
+
+<label>
+Long-term cost
+</label>
+
+<textarea id="tCost"></textarea>
+
+</div>
+
+<div class="field">
+
+<label>
+What could you try next time?
+</label>
+
+<textarea id="tAlternative"></textarea>
+
+</div>
+
+</div>
+
+<button class="primary" onclick="saveTrigger()">
+Save trigger map
+</button>
+
+</div>
+
+
+<div class="card" style="margin-top:16px">
+
+<h3>
+Recent trigger maps
+</h3>
+
+<div id="triggerList"></div>
+
+</div>
+
+</section>
+
+
+<section id="relapse" class="screen">
+
+<div class="card">
+
+<h2>
+Lapse Analysis
+</h2>
+
+<p class="muted">
+A lapse is data, not a verdict. Review the chain without shame.
+</p>
+
+<div class="field">
+
+<label>
+What happened in the 24 hours before?
+</label>
+
+<textarea id="r24"></textarea>
+
+</div>
+
+<div class="grid">
+
+<div class="field">
+
+<label>
+Immediate trigger
+</label>
+
+<input id="rTrigger">
+
+</div>
+
+<div class="field">
+
+<label>
+Emotion
+</label>
+
+<input id="rEmotion">
+
+</div>
+
+<div class="field">
+
+<label>
+Justifying thought
+</label>
+
+<input id="rThought">
+
+</div>
+
+<div class="field">
+
+<label>
+Where / when?
+</label>
+
+<input id="rWhere">
+
+</div>
+
+</div>
+
+<div class="field">
+
+<label>
+What might have interrupted the sequence?
+</label>
+
+<textarea id="rInterrupt"></textarea>
+
+</div>
+
+<div class="field">
+
+<label>
+One change for next time
+</label>
+
+<textarea id="rNext"></textarea>
+
+</div>
+
+<button class="primary" onclick="saveRelapse()">
+Save analysis
+</button>
+
+</div>
+
+
+<div class="card" style="margin-top:16px">
+
+<h3>
+Previous analyses
+</h3>
+
+<div id="relapseList"></div>
+
+</div>
+
+</section>
+
+
+<section id="program" class="screen">
+
+<div class="card">
+
+<h2>
+6-Week Reset Program
+</h2>
+
+<p class="muted">
+A structured psychoeducational sequence to pair with individualized clinical care.
+</p>
+
+<div id="weeks"></div>
+
+</div>
+
+</section>
+
+
+<section id="progress" class="screen">
+
+<div class="grid3">
+
+<div class="card">
+
+<div class="label">
+Check-ins
+</div>
+
+<div class="stat" id="pCheckins">
+0
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="label">
+Urge episodes
+</div>
+
+<div class="stat" id="pUrges">
+0
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="label">
+Trigger maps
+</div>
+
+<div class="stat" id="pTriggers">
+0
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card" style="margin-top:16px">
+
+<h2>
+Progress Dashboard
+</h2>
+
+<div class="grid">
+
+<div>
+
+<div class="label">
+Average urge intensity
+</div>
+
+<div class="stat" id="avgUrge">
+—
+</div>
+
+</div>
+
+<div>
+
+<div class="label">
+Average urge after tool
+</div>
+
+<div class="stat" id="avgEnd">
+—
+</div>
+
+</div>
+
+<div>
+
+<div class="label">
+Check-in days
+</div>
+
+<div class="stat" id="checkDays">
+0
+</div>
+
+</div>
+
+<div>
+
+<div class="label">
+Current week
+</div>
+
+<div class="stat" id="progWeek">
+1
+</div>
+
+</div>
+
+</div>
+
+<hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+
+<h3>
+Common factors
+</h3>
+
+<div id="factors"></div>
+
+<h3 style="margin-top:20px">
+Urge trend
+</h3>
+
+<div id="trend"></div>
+
+</div>
+
+
+<div class="card" style="margin-top:16px">
+
+<h3>
+Prototype data
+</h3>
+
+<p class="muted">
+This Version 1 stores data only in this browser using localStorage.
+It is not appropriate for real client PHI.
+</p>
+
+<button class="danger" onclick="clearData()">
+Clear prototype data
+</button>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+SHPG Reset • Version 1 prototype • Educational/behavior-support tool.
+Not a substitute for diagnosis, psychotherapy, crisis care, or individualized medical advice.
+
+</footer>
+
+</div>
+
+
+<script>
+
+const KEY = 'shpgResetV1';
+
+let data = JSON.parse(
+  localStorage.getItem(KEY) ||
+  '{"checkins":[],"urges":[],"triggers":[],"relapses":[],"weeks":[]}'
+);
+
+
+function save() {
+
+  localStorage.setItem(
+    KEY,
+    JSON.stringify(data)
+  );
+
+  render();
+
+}
+
+
+function showTab(id) {
+
+  document
+    .querySelectorAll('.screen')
+    .forEach(s => s.classList.remove('active'));
+
+  document
+    .getElementById(id)
+    .classList.add('active');
+
+  document
+    .querySelectorAll('.nav button')
+    .forEach(b =>
+      b.classList.toggle(
+        'active',
+        b.dataset.tab === id
+      )
+    );
+
+  render();
+
+}
+
+
+document
+  .querySelectorAll('.nav button')
+  .forEach(
+    b => b.onclick = () => showTab(b.dataset.tab)
+  );
+
+
+function saveCheckin() {
+
+  const factors =
+    [...document.querySelectorAll('.factor:checked')]
+      .map(x => x.value);
+
+  data.checkins.push({
+
+    date:new Date().toISOString(),
+
+    mood:+mood.value,
+
+    urge:+urgeLevel.value,
+
+    stress:+stress.value,
+
+    sleep:+sleep.value,
+
+    factors,
+
+    used:used.value,
+
+    note:checkNote.value
+
+  });
+
+  checkNote.value='';
+
+  document
+    .querySelectorAll('.factor')
+    .forEach(x => x.checked=false);
+
+  save();
+
+  checkMsg.textContent=' Saved.';
+
+  setTimeout(
+    () => checkMsg.textContent='',
+    1500
+  );
+
+}
+
+
+function urgeNext(n) {
+
+  document
+    .querySelectorAll('.urge-step')
+    .forEach(x => x.classList.remove('active'));
+
+  document
+    .getElementById('u'+n)
+    .classList.add('active');
+
+}
+
+
+let breathTimer = null;
+
+
+function startBreath() {
+
+  if (breathTimer) return;
+
+  let s = 60;
+
+  timer.textContent=s;
+
+  timerBar.style.width='0%';
+
+  breathTimer=setInterval(() => {
+
+    s--;
+
+    timer.textContent=s;
+
+    timerBar.style.width =
+      ((60-s)/60*100)+'%';
+
+    if(s<=0) {
+
+      clearInterval(breathTimer);
+
+      breathTimer=null;
+
+      timer.textContent='Done';
+
+    }
+
+  },1000);
+
+}
+
+
+function chooseReplacement(x) {
+
+  replacement.textContent =
+    'Selected: '+x;
+
+}
+
+
+function finishUrge() {
+
+  data.urges.push({
+
+    date:new Date().toISOString(),
+
+    start:+uStart.value,
+
+    end:+uEnd.value,
+
+    replacement:
+      replacement.textContent
+        .replace('Selected: ','')
+  });
+
+  save();
+
+  alert(
+    'Saved. You practiced creating space between urge and action.'
+  );
+
+  urgeNext(1);
+
+}
+
+
+function saveTrigger() {
+
+  data.triggers.push({
+
+    date:new Date().toISOString(),
+
+    trigger:tTrigger.value,
+
+    emotion:tEmotion.value,
+
+    thought:tThought.value,
+
+    function:tFunction.value,
+
+    behavior:tBehavior.value,
+
+    payoff:tPayoff.value,
+
+    cost:tCost.value,
+
+    alternative:tAlternative.value
+
+  });
+
+  [
+    'tTrigger',
+    'tEmotion',
+    'tThought',
+    'tFunction',
+    'tBehavior',
+    'tPayoff',
+    'tCost',
+    'tAlternative'
+  ].forEach(
+    id => document.getElementById(id).value=''
+  );
+
+  save();
+
+}
+
+
+function saveRelapse() {
+
+  data.relapses.push({
+
+    date:new Date().toISOString(),
+
+    r24:r24.value,
+
+    trigger:rTrigger.value,
+
+    emotion:rEmotion.value,
+
+    thought:rThought.value,
+
+    where:rWhere.value,
+
+    interrupt:rInterrupt.value,
+
+    next:rNext.value
+
+  });
+
+  [
+    'r24',
+    'rTrigger',
+    'rEmotion',
+    'rThought',
+    'rWhere',
+    'rInterrupt',
+    'rNext'
+  ].forEach(
+    id => document.getElementById(id).value=''
+  );
+
+  save();
+
+}
+
+
+const weeks = [
+
+[
+  'Week 1',
+  'Understanding the Cycle',
+  'Map triggers, emotions, thoughts, urges, behavior and consequences.',
+  'Complete 3 check-ins + 1 trigger map.'
+],
+
+[
+  'Week 2',
+  'Trigger & Environment',
+  'Identify high-risk times, places, devices and situations. Create an environmental protection plan.',
+  'Identify 3 danger zones + 3 environmental changes.'
+],
+
+[
+  'Week 3',
+  'Urge Management',
+  'Practice breathing, urge surfing, delay, movement and changing environments.',
+  'Complete the 10-minute urge tool at least 3 times.'
+],
+
+[
+  'Week 4',
+  'CBT + ACT Skills',
+  'Notice automatic thoughts, emotional avoidance and values. Practice choosing actions aligned with values.',
+  'Record 3 “thought → choice” moments.'
+],
+
+[
+  'Week 5',
+  'Replacement Behaviors',
+  'Build healthy sources of connection, movement, mastery, rest and purpose.',
+  'Create a personal replacement menu with 5 options.'
+],
+
+[
+  'Week 6',
+  'Relapse Prevention',
+  'Review patterns, warning signs, successful responses and a maintenance plan.',
+  'Complete a relapse-prevention plan and review it with your clinician.'
+]
+
+];
+
+
+function renderWeeks() {
+
+  weeksEl.innerHTML =
+    weeks.map((w,i) => {
+
+      let done =
+        data.weeks.includes(i);
+
+      return `
+
+      <div class="week ${done?'done':''}">
+
+        <h3>
+          Week ${i+1}: ${w[1]}
+          ${done?'✓':''}
+        </h3>
+
+        <p>
+          ${w[2]}
+        </p>
+
+        <p class="muted">
+          <b>Practice:</b>
+          ${w[3]}
+        </p>
+
+        <button
+          class="${done?'secondary':'primary'}"
+          onclick="toggleWeek(${i})">
+
+          ${done?'Mark incomplete':'Mark complete'}
+
+        </button>
+
+      </div>
+
+      `;
+
+    }).join('');
+
+}
+
+
+function toggleWeek(i) {
+
+  data.weeks =
+    data.weeks.includes(i)
+
+      ? data.weeks.filter(x => x!==i)
+
+      : [...data.weeks,i];
+
+  save();
+
+}
+
+
+function render() {
+
+  homeDays.textContent =
+    data.checkins.length;
+
+  pCheckins.textContent =
+    data.checkins.length;
+
+  pUrges.textContent =
+    data.urges.length;
+
+  pTriggers.textContent =
+    data.triggers.length;
+
+
+  let avg = a =>
+    a.length
+      ? (
+          a.reduce((x,y) => x+y,0) /
+          a.length
+        ).toFixed(1)
+      : '—';
+
+
+  avgUrge.textContent =
+    avg(data.urges.map(x => x.start))+'/10';
+
+  avgEnd.textContent =
+    avg(data.urges.map(x => x.end))+'/10';
+
+
+  checkDays.textContent =
+    new Set(
+      data.checkins.map(
+        x => x.date.slice(0,10)
+      )
+    ).size;
+
+
+  let current =
+    Math.min(
+      6,
+      Math.max(
+        1,
+        data.weeks.length+1
+      )
+    );
+
+
+  progWeek.textContent=current;
+
+  homeWeek.textContent=
+    'Week '+current;
+
+
+  let counts={};
+
+
+  data.checkins
+    .flatMap(x => x.factors || [])
+    .forEach(
+      f => counts[f]=(counts[f]||0)+1
+    );
+
+
+  factors.innerHTML =
+    Object.entries(counts)
+      .sort((a,b)=>b[1]-a[1])
+      .map(
+        ([k,v]) =>
+          `<span class="pill">${k}: ${v}</span>`
+      )
+      .join('')
+
+    ||
+
+    '<span class="muted">Complete check-ins to see patterns.</span>';
+
+
+  trend.innerHTML =
+    data.urges
+      .slice(-10)
+      .map(
+        (u,i) => `
+
+        <div style="margin:9px 0">
+
+          <span class="muted">
+            Episode ${i+1}
+          </span>
+
+          <b>
+            ${u.start}/10 → ${u.end}/10
+          </b>
+
+          <div class="bar">
+
+            <i
+              style="width:${u.end*10}%">
+            </i>
+
+          </div>
+
+        </div>
+
+        `
+      )
+      .join('')
+
+    ||
+
+    '<span class="muted">Your urge episodes will appear here.</span>';
+
+
+  triggerList.innerHTML =
+    data.triggers
+      .slice()
+      .reverse()
+      .slice(0,5)
+      .map(
+        x => `
+
+        <div class="entry">
+
+          <b>
+            ${x.emotion || 'Unspecified emotion'}
+          </b>
+
+          <div class="muted">
+            ${x.trigger || 'No trigger entered'}
+          </div>
+
+          <small>
+            Alternative:
+            ${x.alternative || '—'}
+          </small>
+
+        </div>
+
+        `
+      )
+      .join('')
+
+    ||
+
+    '<span class="muted">No trigger maps yet.</span>';
+
+
+  relapseList.innerHTML =
+    data.relapses
+      .slice()
+      .reverse()
+      .slice(0,5)
+      .map(
+        x => `
+
+        <div class="entry">
+
+          <b>
+            ${x.emotion || 'Unspecified emotion'}
+          </b>
+
+          <div>
+            ${x.trigger || 'No trigger entered'}
+          </div>
+
+          <small>
+            Next time:
+            ${x.next || '—'}
+          </small>
+
+        </div>
+
+        `
+      )
+      .join('')
+
+    ||
+
+    '<span class="muted">No analyses yet.</span>';
+
+
+  renderWeeks();
+
+}
+
+
+function clearData() {
+
+  if(
+    confirm(
+      'Clear all SHPG Reset prototype data from this browser?'
+    )
+  ) {
+
+    localStorage.removeItem(KEY);
+
+    location.reload();
+
+  }
+
+}
+
+
+render();
+
+</script>
+
+</body>
+</html>
